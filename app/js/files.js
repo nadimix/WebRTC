@@ -4,8 +4,8 @@ var link, preview, file, reader;
 
 function checkFileAPISupport() {
   window.File && window.FileReader && window.FileList && window.Blob ?
-    console.log("Great, all fileAPIs are supported") :
-    console.log("The File APIs are not fully supported in this browser")
+    log('Great, all fileAPIs are supported') :
+    log('The File APIs are not fully supported in this browser')
 }
 // Aquí obtenemos la URL para webRTC.
 function getRTCDataURI(blob) {
@@ -13,7 +13,7 @@ function getRTCDataURI(blob) {
   link.href = window.URL.createObjectURL(blob);
   //link.download = 'File Name';
   //link.click();
-  console.log("link: " + link);
+  log('link: ' + link);
   document.querySelector('output[name=blobUrl]').value = link;
   document.querySelector('a[name=blobUrl]').href=link;
 }
@@ -31,7 +31,7 @@ function handleFileSelect() {
     console.log("Great! Video loaded successfully");
   }*/
 
-  file ? reader.readAsDataURL(file) : preview.src = "";
+  file ? reader.readAsDataURL(file) : preview.src = '';
   console.log(reader);
 
   getRTCDataURI(file);

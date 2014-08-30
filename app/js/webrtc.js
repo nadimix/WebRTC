@@ -1,5 +1,7 @@
 'use strict';
 
+/************ VARIABLES  ************/
+
 // JavaScript variables holding stream and connection information
 var RTCPeerConnection, RTCSessionDescription, RTCIceCandidate, localPeerConnection, remotePeerConnection;
 
@@ -88,7 +90,7 @@ function createConnection() {
   remotePeerConnection.ondatachannel = gotReceiveChannel;
 
   // We're all set! Let's start negotiating a session...
-  localPeerConnection.createOffer(gotLocalDescription, onSignallingError);
+  localPeerConnection.createOffer(gotLocalDescription, onSignalingError);
 
   stopButton.disabled = false;
   sendButton.disabled = false;
@@ -97,7 +99,7 @@ function createConnection() {
 
 /************ SIGNALLING ************/
 
-function onSignallingError(error) {
+function onSignalingError(error) {
   log('Failed to create signalling message: ' + error.name);
 }
 
@@ -115,7 +117,7 @@ function gotLocalDescription(description) {
   remotePeerConnection.setRemoteDescription(description);
 
   // Create the Answer to the received Offer based on the 'local' description
-  remotePeerConnection.createAnswer(gotRemoteDescription, onSignallingError);
+  remotePeerConnection.createAnswer(gotRemoteDescription, onSignalingError);
 }
 
 // Handler to be called when the remote SDP becomes available
@@ -152,27 +154,6 @@ function gotRemoteIceCandidate(event){
 // Handler for sending data to the remote peer, Firefox allow us send blobs directly
 function sendData() {
   var data = document.querySelector('input[type=file]').files[0];
-/*
-  var delay = 10;
-  var charSlice = 10000;
-  var terminator = "\n";
-  var dataSent = 0;
-  var intervalID = 0;
-
-  intervalID = setInterval(function(){
-    var slideEndIndex = dataSent + charSlice;
-    if (slideEndIndex > data.length) {
-      slideEndIndex = data.length;
-    }
-    sendChannel.send(data.slice(dataSent, slideEndIndex));
-    dataSent = slideEndIndex;
-    if (dataSent + 1 >= data.length) {
-      log('All data chunks sent.');
-      sendChannel.send("\n");
-      clearInterval(intervalID);
-    }
-  }, delay);
-*/
   log('Sending data: ' + data);
   sendChannel.send(data);
   log('Sent data: ' + data);
@@ -195,7 +176,6 @@ function closeDataChannels() {
     startButton.disabled = false;
     sendButton.disabled = true;
     stopButton.disabled = true;
-    preview.src = "";
 }
 
 // Handler associated with the management of remote peer connection's data channel events
@@ -222,17 +202,9 @@ function handleMessage(event) {
     var fileDataURL = event.target.result;
     log('Received blob url: ' + fileDataURL);
     preview.src = reader.result;
-    console.log("Great! Video loaded successfully");
+    log('Great! Video loaded successfully');
     //saveToDisk(fileDataURL, 'Received content');
   };
-
-  /*reader.onloadend = function () {
-    preview.src = reader.result;
-    console.log("Great! Video loaded successfully");
-  }*/
-
-
-  // TODO: show video into player.
 }
 
 // Handler for either 'open' or 'close' events on sender's data channel
